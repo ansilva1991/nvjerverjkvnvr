@@ -1,0 +1,67 @@
+Design Game
+  Nombre: Indefinido
+  Plataforma: Browser
+
+  Pantallas:
+    Loading:
+      Una barra de cargado , con un porcentaje.
+    Login:
+      Registrarse con email y password.
+      Iniciar sesión con email y password.
+      Posibilidad de ingresar sin loguearse, pero no se guarda la partida.
+    Personalizacion_Superviviente:
+      Editables:
+        Nombre
+        Apellido
+        Sexo
+        Tez
+        Cabello
+        Conjunto Inicial
+        Habilidad
+  Reglas:
+    Login:
+      Personalizar tu propio superviviente en aspecto y habilidades.
+      Se te asignan al azar 2 supervivientes mas con habilidades diferentes a las tuyas.
+    Habilidades:
+      Sigilo:
+        Permite avanzar lentamente sin ser escuchado por los enemigos no animales.
+      Sigilo_Extremo:
+        Permite avanzar mas rapidamente sin ser escuchado cualquier tipo de enemigos.
+      Guerrero:
+        Aumenta el daño inflido con armas cuerpo a cuerpo en un 20%.
+      Vikingo:
+        Aumenta el daño inflido con armas cuerpo a cuerpo en un 40% y posibilidad de acertar en la cabeza.
+    GamePlay:
+        Posibilidad de seleccionar uno o muchos supervivientes a la vez. Hacer click sobre uno se selecciona solo ese.
+        Hacer click sobre varios con Crtl apretado seleccionas muchos o doble click sobre cualquiera selecciona a todos.
+        Arrastrar para crear un cuadrado seleccionando todos los que esten dentro del mismo.
+      Acciones Grupales:
+        Click en un lugar dentro de la vista para ir hacia ese punto todos juntos.
+        Click en un enemigo para atacarlo, y todos lo atacan en conjunto.
+        Click en un objeto y el superviviente mas cercano va por el.
+      Acciones Individuales:
+        Click en un lugar dentro de la vista para ir hacia ese punto.
+        Click en un enemigo para atacarlo.
+        Click en un objeto para ir por el.
+        Hablar o dar ordenes, solo los supervivientes que esten dentro del rango de voz de emisor la reciben.
+        Algunos supervivientes son rebeldes y no aceptan las ordenes.
+      Cojer_Objeto:
+        Muestra el inventario del personaje actual.
+        Posibilidad de abrir el inventario de todos los supervivientes cercanos para guardar el objeto.
+        Posibilidad de cojer todo organizando automaticamente.
+      Inventario:
+         Se compone de casilla limitadas, cada objeto ocupa una determinada cantidad de casillas.
+         Es posible girar un objeto para hacerlo entrar de otra forma.
+    Enemigos:
+      Zombie_Normal:
+        Velocidad: 1
+        Vida: 4
+        Daño: 1
+        Tipo_Golpe: Cuerpo a Cuerpo
+        Posibilidad_Head_Shoot: true
+        Rango_movimiento: 5 mts
+        Rango_oido: 5 mts
+        Distancia_persecución: 10 mts 
+        Comportamiento:
+          Movimiento Aleatorio dentro de un rango establecido, Si escucha un sonido o ve a un superviviente lo persigue hasta alejarse una distancia establecida de su punto de origen.
+          Luego retorna a su punto de origen.

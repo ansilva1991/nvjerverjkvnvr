@@ -1,0 +1,145 @@
+<script type="text/javascript">
+  var islands = [];
+  var init_point;
+  var end_point;
+
+  var grid = [];
+  for(var i = 0; i < 40; i++){
+    grid.push([]);
+    for(var j = 0; j < 50; j++){
+      grid[i].push(" ");
+    }
+  }
+
+  var config = {
+    max_size_island : Math.round(Math.random() * 10) + 4,
+    min_size_island : 4
+  };
+
+  //Create Islands
+  for(var i = 0; i < 20; i++){
+    islands.push(new Island(grid));
+  }
+  //Create Point Init
+    init_point = new InitPoint();
+  //Create Point End
+    end_point = new EndPoint();
+
+  var size = 15;
+
+  for(var i = 0; i < grid.length; i++){
+    for(var j = 0; j < grid[i].length; j++){
+      var color = "#4592C5";
+      if(grid[i][j] == 1){ color = "#69571D"; }
+      if(grid[i][j] == 2){ color = "#fff"; }
+      if(grid[i][j] == 3){ color = "#2E7E2E"; }
+      if(grid[i][j] == 4){ color = "#ff0000"; }
+      if(grid[i][j] == 5){ color = "#0000ff"; }
+
+      document.write('<div style="width:'+ size + 'px; height:' + size + 'px; top:' + (i * size) + 'px; left:'+(j*size)+'px; position:absolute; background:'+color+';" id="content"></div>');
+    }
+  }
+
+  function distanceTo(o,d){
+    return Math.sqrt(((d[0] - o[0]) * (d[0] - o[0])) + ((d[1] - o[1])*(d[1] - o[1])));
+  }
+
+  function Island(grid){
+    this.x = 0;
+    this.y = 0;
+    this.w = 0;
+    this.h = 0;
+    this.x_center = 0;
+    this.y_center = 0;
+    this.type = 0;
+
+    this.generate = function(grid){
+      var type_island = Math.round(Math.random() * 2) + 1;
+
+      var last_island = islands[islands.length - 1];
+      if(last_island != undefined){
+        while(type_island == last_island.type){
+          type_island = Math.round(Math.random() * 2) + 1;
+        }
+      }
+
+      var width = Math.round(Math.random() * (grid[0].length - 3)) + 1; 
+      var height = Math.round(Math.random() * (grid.length - 3)) + 1; 
+
+      if(width > config.max_size_island){ width = config.max_size_island; }
+      if(height > config.max_size_island){ height = config.max_size_island; }
+
+      if(width < config.max_size_island){ width = config.min_size_island; }
+      if(height < config.max_size_island){ height = config.min_size_island; }
+
+      var point_init = [Math.round(Math.random() * (grid[0].length - width - 1)) + 1,Math.round(Math.random() * (grid.length - height - 1)) + 1];
+      
+      var x_center = Math.floor(point_init[0] + width * 0.5);
+      var y_center = Math.floor(point_init[1] + height * 0.5);
+      var max_distance = distanceTo(point_init,[x_center,y_center]);
+
+      for(var i = point_init[1]; i < point_init[1] + height; i++){
+        for(var j = point_init[0]; j < point_init[0] + width; j++){
+          if(i > grid.length - 2){ continue; }
+          if(j > grid[0].length - 2){ continue; }
+
+          var distance = distanceTo([x_center,y_center],[j,i]);
+          var porc = 100 - distance * 100 / max_distance;
+          var p = Math.random() - 0.25;
+
+          if(p <= porc/100){
+            var t = Math.random();
+            grid[i][j] = (t <= porc/100) ? type_island : 1;
+            continue;
+          }
+          grid[i][j] = 0;
+        }
+      }
+      this.x = point_init[0];
+      this.y = point_init[1];
+      this.w = width;
+      this.h = height;
+      this.x_center = x_center;
+      this.y_center = y_center;
+      this.type = type_island;
+    }
+    this.setInitPoint = function(point){
+      point.x = this.x_center;
+      point.y = this.y_center;
+
+      grid[point.y][point.x] = 4;
+    }
+    this.setEndPoint = function(point){
+      point.x = this.x_center;
+      point.y = this.y_center;
+
+      grid[point.y][point.x] = 5;
+    }
+    this.generate(grid);
+  }
+  function InitPoint(){
+    this.x = 0;
+    this.y = 0;
+
+    this.island = Math.round( Math.random() * (islands.length - 1) );
+
+    islands[this.island].setInitPoint(this);
+  }
+  function EndPoint(){
+    this.x = 0;
+    this.y = 0;
+
+    var init_island = islands[init_point.island];
+    var dist = -1;
+    var is = -1;
+    for(var i = 0; i < islands.length;i++){
+      if(dist < distanceTo([init_island.x_center,init_island.y_center],[islands[i].x_center,islands[i].y])){
+        dist = distanceTo([init_island.x_center,init_island.y_center],[islands[i].x_center,islands[i].y]);
+        is = i;
+      }
+    }
+    this.island = is;
+
+    islands[this.island].setEndPoint(this);
+  }
+</script>
