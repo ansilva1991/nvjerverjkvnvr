@@ -11,7 +11,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141031134432) do
+ActiveRecord::Schema.define(version: 20141102005647) do
+
+  create_table "game_histories", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "main_survivor_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "game_histories", ["user_id"], name: "index_game_histories_on_user_id", using: :btree
+
+  create_table "survivors", force: true do |t|
+    t.string   "name"
+    t.string   "last_name"
+    t.string   "sex"
+    t.integer  "skin"
+    t.integer  "hair"
+    t.integer  "game_history_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "survivors", ["game_history_id"], name: "index_survivors_on_game_history_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "name",                   default: "", null: false

@@ -3,7 +3,9 @@ en:
     loading: Loading
     survivor: Survivor
   buttons:
+    play: Play
     login: Login
+    logout: Logout
     register: Register
     guest: Login as a guest
     back: Back

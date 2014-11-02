@@ -1,0 +1,8 @@
+<h1>Home#index</h1>
+<% if user_signed_in? %>
+  <%= link_to t('buttons.logout'), destroy_user_session_path, method: :delete %>
+  <%= link_to t('buttons.play'), play_path %>
+<% else %>
+  <%= link_to t('buttons.login'), new_user_session_path %>
+  <%= link_to t('buttons.register'), new_user_registration_path %>
+<% end %>
