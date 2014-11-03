@@ -11,16 +11,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141102005647) do
+ActiveRecord::Schema.define(version: 20141102194526) do
 
   create_table "game_histories", force: true do |t|
     t.integer  "user_id"
-    t.integer  "main_survivor_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "game_histories", ["user_id"], name: "index_game_histories_on_user_id", using: :btree
+
+  create_table "maps", force: true do |t|
+    t.integer  "game_history_id"
+    t.text     "grid"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "maps", ["game_history_id"], name: "index_maps_on_game_history_id", using: :btree
 
   create_table "survivors", force: true do |t|
     t.string   "name"
@@ -28,6 +36,9 @@ ActiveRecord::Schema.define(version: 20141102005647) do
     t.string   "sex"
     t.integer  "skin"
     t.integer  "hair"
+    t.integer  "x"
+    t.integer  "y"
+    t.string   "zone_code"
     t.integer  "game_history_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -54,5 +65,18 @@ ActiveRecord::Schema.define(version: 20141102005647) do
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+
+  create_table "zones", force: true do |t|
+    t.integer  "map_id"
+    t.string   "zone_code"
+    t.string   "zone_type"
+    t.integer  "x"
+    t.integer  "y"
+    t.text     "floor_tiles"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "zones", ["map_id"], name: "index_zones_on_map_id", using: :btree
 
 end

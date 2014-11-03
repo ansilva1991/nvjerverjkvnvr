@@ -1,2 +1,31 @@
+<% content_for :files_imported do %>
+  <%= javascript_include_tag 'survivors' %>
+<% end %>
+
 <h1>Survivors#new</h1>
-<canvas width="64" height="96" id="avatar"></canvas>
+<%= form_for @survivor ,url: my_survivor_path do |f| %>
+  <%= f.label t('models.survivor.name') %>
+  <%= f.text_field :name, autofocus: true %><br>
+
+  <%= f.label t('models.survivor.last_name') %>
+  <%= f.text_field :last_name %><br>
+
+  <%= f.label :sex %><br>
+  <%= t('models.survivor.sexs.m') %>
+  <%= f.radio_button :sex, "m" , checked: "checked", class: "change_sex" %>
+  <%= t('models.survivor.sexs.f') %>
+  <%= f.radio_button :sex, "f" , class: "change_sex" %><br>
+
+  <%= f.label :skin %><br>
+  <% collect_tez.each do |n| %>
+    <%= n %>
+    <%= f.radio_button :skin, n , checked: "checked" , class: "change_skin" %>
+  <% end %><br>
+
+  <canvas width="64" height="96" id="avatar"></canvas><br>
+
+  <%= link_to "Turn Left","javascript:avatar.turnLeft();" %>
+  <%= link_to "Turn Right","javascript:avatar.turnRight();" %><br>
+
+  <%= f.submit %>
+<% end %>

@@ -6,6 +6,9 @@ class CreateSurvivors < ActiveRecord::Migration
       t.string :sex
       t.integer :skin
       t.integer :hair
+      t.integer :x
+      t.integer :y
+      t.string :zone_code
       t.integer :game_history_id
 
       t.timestamps

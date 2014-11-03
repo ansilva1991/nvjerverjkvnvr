@@ -2,27 +2,32 @@
 //= require resources
 //= require avatar_human
 
+var canvas = document.getElementById("avatar");
+var ctx = canvas.getContext("2d");
+ctx.imageSmoothingEnabled = false;
+
 var main = {};
-var avatar;
-var canvas,ctx;
+main.resources = new Resources();
 
-$(document).ready(function(){
-  canvas = document.getElementById("avatar");
-  ctx = canvas.getContext("2d");
-  ctx.imageSmoothingEnabled = false;
-  main.resources = new Resources();
+main.loop = new LoopGame(function(){
+  ctx.fillStyle = "#fff";
+  ctx.fillRect(0,0,64,96);
 
-  main.loop = new LoopGame(function(){
-    ctx.fillStyle = "#fff";
-    ctx.fillRect(0,0,64,96);
+  avatar.Update();
+  avatar.Draw(ctx);
+});
 
-    avatar.Update();
-    avatar.Draw(ctx);
-  });
+var avatar = new AvatarHuman({ skin : 0 , x : 32, y : 80 , scale : 2 });
+avatar.parent_dir = 7;
+avatar.updateResources();
+avatar.changeAnim("idle");
 
-  avatar = new AvatarHuman({ skin : 0 , x : 32, y : 80 , scale : 2 });
-  avatar.updateResources();
-  avatar.changeAnim("rotate");
+main.loop.Start();
 
-  main.loop.Start();
+//GUI
+$('.change_sex').click(function(){
+  avatar.changeAttr({ sex : $(this).val() });
+});
+$('.change_skin').click(function(){
+  avatar.changeAttr({ skin : $(this).val() });
 });

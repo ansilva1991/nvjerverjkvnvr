@@ -16,8 +16,12 @@ en:
       title: Register
   models:
     user:
-      name: Name
-      last_name: Last Name
       email: Email
       password: Password
       password_confirmation: Confirm Password
+    survivor:
+      name: Name
+      last_name: Last Name
+      sexs:
+        m: Male
+        f: Female
