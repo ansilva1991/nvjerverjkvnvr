@@ -5,7 +5,5 @@
 
 var main;
 
-$(document).ready(function(){
-  main = new Main();
-  main.Start();
-});
+main = new Main();
+main.Start();

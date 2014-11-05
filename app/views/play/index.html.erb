@@ -1,5 +1,9 @@
 <% content_for :files_imported do %>
+  <script type="text/javascript">
+    var zone_code = '<%= @zone_code %>';
+  </script>
   <%= javascript_include_tag 'play' %>
+  <%= stylesheet_link_tag 'play' %>
 <% end %>
 <layer id="loading"><%= render partial: 'loading' %></layer>
-<%= @zone.floor_tiles %>
+<%= @zone_code %>

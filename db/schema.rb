@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(version: 20141102194526) do
 
   create_table "maps", force: true do |t|
     t.integer  "game_history_id"
-    t.text     "grid"
+    t.integer  "template"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

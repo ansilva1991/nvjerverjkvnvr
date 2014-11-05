@@ -3,15 +3,13 @@ class PlayController < ApplicationController
   before_action :authenticate_user!, :has_game_history
   
   def index
-    if (params[:zone_code] && current_user.game_history.has_survivor_in_zone?(params[:zone_code]))
-      if Zone.valid_zone_code? params[:zone_code], current_user
-        @zone = Zone.get_zone(params[:zone_code], current_user)
-      else
-        redirect_to home_index_path
-      end
-    else
-      redirect_to "/play/#{current_user.game_history.get_current_zone}"
-    end
+    @zone_code = current_user.game_history.get_current_zone_code
+  end
+
+  def get_zone
+    current_user.map.update_template
+    zone = current_user.map.get_zone_by_zone_code params[:zone_code]
+    render :json => current_user
   end
 
   def has_game_history

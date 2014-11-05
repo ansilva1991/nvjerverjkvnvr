@@ -2,7 +2,7 @@ class CreateMaps < ActiveRecord::Migration
   def up
     create_table :maps do |t|
       t.integer :game_history_id
-      t.text :grid
+      t.integer :template
       t.timestamps
     end
 

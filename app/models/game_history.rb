@@ -4,6 +4,8 @@ class GameHistory < ActiveRecord::Base
   has_one :map , dependent: :destroy
   has_many :survivors, dependent: :destroy
 
+  before_destroy :destroy_files
+
   def self.init current_user, survivor_params
     survivor = Survivor.create survivor_params
 
@@ -19,13 +21,11 @@ class GameHistory < ActiveRecord::Base
     not self.survivors.where(zone_code: zone_code).empty?
   end
 
-  def get_current_zone
+  def get_current_zone_code
     self.survivors.first.zone_code
   end
 
-  def set_init_zone
-    init_zone = map.zones.where(zone_type: 4)
-    self.survivors.first.zone = init_zone
-
+  def destroy_files
+    FileUtils.rm_rf("users/#{self.user_id}")
   end
 end
