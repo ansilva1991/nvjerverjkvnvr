@@ -41,14 +41,14 @@ class Template
     WORLD.each do |key,value|
       return key if value == point
     end
-    nil
+    raise "undefined zone_type (#{point})"
   end
 
   def correct_angle
     angle = 0
-    angle = 90 if Template.pixel_code(self.file.point_color(self.file.columns,0)) == POINT_ANGLE
-    angle = 180 if Template.pixel_code(self.file.point_color(self.file.columns,self.file.rows)) == POINT_ANGLE
-    angle = 270 if Template.pixel_code(self.file.point_color(0,self.file.rows)) == POINT_ANGLE
+    angle = 90 if Template.pixel_code(self.file.pixel_color(self.file.columns,0)) == POINT_ANGLE
+    angle = 180 if Template.pixel_code(self.file.pixel_color(self.file.columns,self.file.rows)) == POINT_ANGLE
+    angle = 270 if Template.pixel_code(self.file.pixel_color(0,self.file.rows)) == POINT_ANGLE
 
     self.file = file.rotate(angle)
   end

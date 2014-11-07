@@ -5,6 +5,12 @@ class Zone < ActiveRecord::Base
 
   serialize :floor_tiles
 
+  before_create :set_template
+
+  def set_template
+    #in progress
+  end
+
   def self.code_from_coordinate coords
     "#{coords.first}:#{coords.last}"
   end
