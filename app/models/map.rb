@@ -6,7 +6,7 @@ class Map < ActiveRecord::Base
   before_create :set_template
 
   def set_template
-    template = Template.new({ :random => true, :type => Template::TYPE_WORLD })
+    template = Template.new({ type: Template::TYPE_WORLD })
     self.template = template.id
 
     Dir.mkdir("users/#{game_history.user_id}")
@@ -19,8 +19,8 @@ class Map < ActiveRecord::Base
   end
 
   def update_template
-    current_template = Template.new({:file => "templates/world/#{self.template}.png"})
-    self_template = Template.new({:file => "users/#{game_history.user_id}/world.png"})
+    current_template = Template.new({file: "#{Template::PATH}/world/#{self.template}.png"})
+    self_template = Template.new({file: "users/#{game_history.user_id}/world.png"})
     self_template.correct_angle
 
     if current_template.b64 != self_template.b64
@@ -30,16 +30,16 @@ class Map < ActiveRecord::Base
 
   def get_zone_by_zone_code zone_code
     template = Template.new({:file => "users/#{game_history.user_id}/world.png"})
-    zone = Zone.where(:zone_code => zone_code).first
+    zone = Zone.where(zone_code: zone_code).first
     unless zone
       zone_coords = Zone.decode zone_code
       zone_type = template.get_zone_type zone_coords
 
       zone = Zone.new({
-        :zone_code => zone_code,
-        :zone_type => zone_type,
-        :x => zone_coords[:x],
-        :y => zone_coords[:y]
+        zone_code: zone_code,
+        zone_type: zone_type,
+        x: zone_coords[:x],
+        y: zone_coords[:y]
         })
 
       zones << zone

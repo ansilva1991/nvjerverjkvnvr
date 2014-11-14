@@ -8,7 +8,13 @@ class Zone < ActiveRecord::Base
   before_create :set_template
 
   def set_template
-    #in progress
+    template = Template.new({
+      type: Template::TYPE_ZONE,
+      zone_type: self.zone_type })
+    template.rotate_rnd
+    template.save "users/#{map.game_history.user_id}/#{self.x}_#{self.y}.png"
+
+    info = template.get_grid_zone
   end
 
   def self.code_from_coordinate coords
@@ -17,7 +23,7 @@ class Zone < ActiveRecord::Base
 
   def self.decode zone_code
     c = zone_code.split(':')
-    { :x => c.first.to_i, :y => c.last.to_i }
+    { x: c.first.to_i, y: c.last.to_i }
   end
 
 end
