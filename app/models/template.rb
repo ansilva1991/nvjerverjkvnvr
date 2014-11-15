@@ -81,14 +81,14 @@ class Template
 
     grid.all_points.each do |point|
       around = grid.around_exp point[:x], point[:y]
-      value = info_tiles[point[:value]].keys.collect do |key|
-        info_tiles[point[:value]][key] if /#{key}/.match(around)
+      value = info_tiles[point[:value]]['default']
+      info_tiles[point[:value]].keys.each do |key|
+        value = info_tiles[point[:value]][key] if /#{key}/.match(around)
       end
-      value ||= info_tiles[point[:value]]['default']
       tiles.set(point[:x],point[:y],value)
     end
-    debugger
-    puts 2
+
+    tiles
   end
 
   def correct_angle

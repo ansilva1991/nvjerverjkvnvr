@@ -1,4 +1,4 @@
-//= require loop_game
+//= require gameloop
 //= require resources
 //= require avatar_human
 
@@ -9,7 +9,7 @@ ctx.imageSmoothingEnabled = false;
 var main = {};
 main.resources = new Resources();
 
-main.loop = new LoopGame(function(){
+main.loop = new GameLoop(function(){
   ctx.fillStyle = "#fff";
   ctx.fillRect(0,0,64,96);
 
@@ -17,7 +17,7 @@ main.loop = new LoopGame(function(){
   avatar.Draw(ctx);
 });
 
-var avatar = new AvatarHuman({ skin : 0 , x : 32, y : 80 , scale : 2 });
+var avatar = new AvatarHuman({ skin : 0 , x : 16, y : 52 , scale : 2 });
 avatar.parent_dir = 7;
 avatar.updateResources();
 avatar.changeAnim("idle");

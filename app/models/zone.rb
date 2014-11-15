@@ -15,6 +15,7 @@ class Zone < ActiveRecord::Base
     template.save "users/#{map.game_history.user_id}/#{self.x}_#{self.y}.png"
 
     info = template.get_grid_zone
+    self.floor_tiles = info.grid
   end
 
   def self.code_from_coordinate coords

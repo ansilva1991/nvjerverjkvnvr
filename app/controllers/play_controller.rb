@@ -9,7 +9,7 @@ class PlayController < ApplicationController
   def get_zone
     current_user.map.update_template
     zone = current_user.map.get_zone_by_zone_code params[:zone_code]
-    render json: current_user
+    render json: zone
   end
 
   def has_game_history
