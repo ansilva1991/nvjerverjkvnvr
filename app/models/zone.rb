@@ -27,4 +27,9 @@ class Zone < ActiveRecord::Base
     { x: c.first.to_i, y: c.last.to_i }
   end
 
+  def to_json_load
+    {
+      floor_tiles: floor_tiles
+    }
+  end
 end
