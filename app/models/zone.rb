@@ -1,3 +1,6 @@
+require 'RMagick'
+include Magick
+
 class Zone < ActiveRecord::Base
 
   belongs_to :map
@@ -14,8 +17,8 @@ class Zone < ActiveRecord::Base
     template.rotate_rnd
     template.save "users/#{map.game_history.user_id}/#{self.x}_#{self.y}.png"
 
-    info = template.get_grid_zone
-    self.floor_tiles = info.grid
+    info = template.generate_zone "users/#{map.game_history.user_id}/#{self.x}_#{self.y}"
+    self.floor_tiles = info[:tiles]
   end
 
   def self.code_from_coordinate coords
@@ -27,9 +30,19 @@ class Zone < ActiveRecord::Base
     { x: c.first.to_i, y: c.last.to_i }
   end
 
+  def static_mask
+    i = Template.new({ :file => "users/#{map.game_history.user_id}/#{self.x}_#{self.y}_mask.png"})
+    mask = Grid.new({ w: i.file.columns, h: i.file.rows, default:  0 })
+    i.file.each_pixel do |pixel,c,r|
+      mask.set(c,r,1) if pixel.to_color == "black"
+    end
+    mask.invert
+  end
+
   def to_json_load
     {
-      floor_tiles: floor_tiles
+      floor_tiles: floor_tiles,
+      static_mask: static_mask
     }
   end
 end

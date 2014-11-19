@@ -9,6 +9,7 @@ Rails.application.config.assets.precompile += %w( play.css )
 
 Rails.application.config.assets.precompile += %w( survivors.js )
 Rails.application.config.assets.precompile += %w( play.js )
+Rails.application.config.assets.precompile += %w( libs/pathfinding-browser.min.js )
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
 # Rails.application.config.assets.precompile += %w( search.js )

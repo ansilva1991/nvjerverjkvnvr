@@ -40,4 +40,11 @@ class Grid
     end
     resp
   end
+  def invert
+    new_grid = Array.new(height){ Array.new(width){ nil } }
+    all_points.each do |point|
+      new_grid[point[:y]][point[:x]] = point[:value]
+    end
+    self.grid = new_grid
+  end
 end

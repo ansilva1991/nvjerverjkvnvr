@@ -1,6 +1,11 @@
 <% content_for :files_imported do %>
+  <%= javascript_include_tag 'libs/pathfinding-browser.min.js' %>
   <%= javascript_include_tag 'play' %>
   <%= stylesheet_link_tag 'play' %>
 <% end %>
-<layer id="loading"><%= render partial: 'loading' %></layer>
-<layer id="game"><%= render partial: 'game' %></layer>
+<layer id="loading">
+  <%= render partial: 'loading' %>
+</layer>
+<layer id="game"
+  ><%= render partial: 'game' %>
+</layer>

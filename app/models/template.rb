@@ -1,4 +1,6 @@
 require 'RMagick'
+include Magick
+
 class Template
 
   PATH = "files/templates"
@@ -66,7 +68,7 @@ class Template
     raise "undefined zone_type (#{point})"
   end
 
-  def get_grid_zone
+  def generate_zone path
     info_tiles = YAML.load_file("files/info_zones/#{self.zone_type}.yaml")
 
     grid = Grid.new({ w: self.file.columns, h: self.file.rows })
@@ -88,7 +90,13 @@ class Template
       tiles.set(point[:x],point[:y],value)
     end
 
-    tiles
+    #create static mask
+    f = Image.new(self.file.columns * 3,self.file.rows * 3) { self.background_color = "white" }
+    f.write "#{path}_mask.png"
+
+    {
+      :tiles => tiles.grid
+    }
   end
 
   def correct_angle

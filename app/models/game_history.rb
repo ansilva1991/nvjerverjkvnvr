@@ -19,7 +19,7 @@ class GameHistory < ActiveRecord::Base
 
   def get_last_info
     {
-      zone: map.get_zone_by_zone_code( survivors.first.zone.zone_code ).to_json_load,
+      zone: map.get_zone_by_zone_code( survivors.first.zone_code ).to_json_load,
       survivors: survivors.collect(&:to_json_load)
     }
   end
