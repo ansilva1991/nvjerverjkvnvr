@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141102194526) do
+ActiveRecord::Schema.define(version: 20141120210215) do
 
   create_table "game_histories", force: true do |t|
     t.integer  "user_id"
@@ -72,9 +72,9 @@ ActiveRecord::Schema.define(version: 20141102194526) do
     t.string   "zone_type"
     t.integer  "x"
     t.integer  "y"
-    t.text     "floor_tiles"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "template"
   end
 
   add_index "zones", ["map_id"], name: "index_zones_on_map_id", using: :btree

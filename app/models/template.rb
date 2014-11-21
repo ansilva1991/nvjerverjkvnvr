@@ -4,46 +4,10 @@ include Magick
 class Template
 
   PATH = "files/templates"
-  TYPE_WORLD = "world"
-  TYPE_ZONE = "zone"
 
   POINT_ANGLE = "_65535_65535_65535"
-  WORLD = {
-    init_zone: "_0_0_65535",
-    water_zone: "_0_0_0"
-  }
-  ZONE = {
-    init_zone: {
-      _65535_65535_65535: :street,
-      _0_65535_0: :sidewalk,
-      _0_23130_65535: :street,
-      _65535_65535_0: :building
-    }
-  }
 
-
-  attr_accessor :src, :id, :file, :type, :zone_type
-
-  def initialize options
-    t = nil
-
-    if options[:file]
-      t = options[:file]
-    else
-      case options[:type]
-        when TYPE_WORLD
-          t = Dir["#{PATH}/world/*"].sample
-        when TYPE_ZONE
-          t = Dir["#{PATH}/zone/#{options[:zone_type]}/*"].sample
-      end
-    end
-
-    self.src = t
-    self.id = t.split('/').last.tr('.png','').to_i
-    self.type = options[:type]
-    self.zone_type = options[:zone_type]
-    self.file = Magick::ImageList.new(t).first
-  end
+  attr_accessor :src, :id, :file, :zone_type
 
   def rotate_rnd
     self.file = file.rotate([0,90,180,270].sample)
@@ -51,52 +15,6 @@ class Template
 
   def save path
     self.file.write path
-  end
-
-  def get_init_zone_code
-    self.file.each_pixel do |pixel, c, r|
-      return Zone.code_from_coordinate([c,r]) if WORLD[:init_zone] == Template.pixel_code(pixel)
-    end
-    nil
-  end
-
-  def get_zone_type coords
-    point = Template.pixel_code self.file.pixel_color(coords[:x],coords[:y])
-    WORLD.each do |key,value|
-      return key if value == point
-    end
-    raise "undefined zone_type (#{point})"
-  end
-
-  def generate_zone path
-    info_tiles = YAML.load_file("files/info_zones/#{self.zone_type}.yaml")
-
-    grid = Grid.new({ w: self.file.columns, h: self.file.rows })
-
-    self.file.each_pixel do |pixel, c, r|
-      type = ZONE[self.zone_type][Template.pixel_code(pixel).to_sym]
-      raise "undefined tile_type (#{Template.pixel_code(pixel)} in #{c}/#{r})" unless type
-      grid.set c,r,type.to_s
-    end
-
-    tiles = Grid.new({ w: self.file.columns, h: self.file.rows })
-
-    grid.all_points.each do |point|
-      around = grid.around_exp point[:x], point[:y]
-      value = info_tiles[point[:value]]['default']
-      info_tiles[point[:value]].keys.each do |key|
-        value = info_tiles[point[:value]][key] if /#{key}/.match(around)
-      end
-      tiles.set(point[:x],point[:y],value)
-    end
-
-    #create static mask
-    f = Image.new(self.file.columns * 3,self.file.rows * 3) { self.background_color = "white" }
-    f.write "#{path}_mask.png"
-
-    {
-      :tiles => tiles.grid
-    }
   end
 
   def correct_angle
@@ -110,6 +28,14 @@ class Template
 
   def self.pixel_code pixel
     "_#{pixel.red}_#{pixel.blue}_#{pixel.green}"
+  end
+
+  def self.int_to_pixel int
+    rgb = {}
+    %w(r g b).inject(int) {|a,i| rest, rgb[i] = a.divmod 256; rest}
+    rgb = rgb.collect{|i,j| j * 257 }
+
+    Pixel.new(rgb[0],rgb[1],rgb[2],0)
   end
 
   def b64

@@ -6,37 +6,43 @@ class Zone < ActiveRecord::Base
   belongs_to :map
   has_many :survivors
 
-  serialize :floor_tiles
-
   before_create :set_template
+  before_destroy :destroy_templates
 
   def set_template
-    template = Template.new({
-      type: Template::TYPE_ZONE,
-      zone_type: self.zone_type })
+    template = TemplateZone.new({ zone_type: self.zone_type })
     template.rotate_rnd
-    template.save "users/#{map.game_history.user_id}/#{self.x}_#{self.y}.png"
+    template.save "users/#{map.game_history.user_id}/#{self.zone_code}.png"
+    self.id = template.id
 
     info = template.generate_zone "users/#{map.game_history.user_id}/#{self.x}_#{self.y}"
-    self.floor_tiles = info[:tiles]
+  end
+
+  def destroy_templates
+    Dir["users/4/#{self.zone_code}*"].each do |f|
+      FileUtils.rm_rf(f)
+    end
   end
 
   def self.code_from_coordinate coords
-    "#{coords.first}:#{coords.last}"
+    "#{coords.first}_#{coords.last}"
   end
 
   def self.decode zone_code
-    c = zone_code.split(':')
+    c = zone_code.split('_')
     { x: c.first.to_i, y: c.last.to_i }
   end
 
   def static_mask
-    i = Template.new({ :file => "users/#{map.game_history.user_id}/#{self.x}_#{self.y}_mask.png"})
-    mask = Grid.new({ w: i.file.columns, h: i.file.rows, default:  0 })
-    i.file.each_pixel do |pixel,c,r|
-      mask.set(c,r,1) if pixel.to_color == "black"
+    File.open("users/#{map.game_history.user_id}/#{zone_code}_mask.png", 'r') do|image_file|
+      return Base64.encode64(image_file.read)
     end
-    mask.invert
+  end
+
+   def floor_tiles
+    File.open("users/#{map.game_history.user_id}/#{zone_code}_floor_tiles.png", 'r') do|image_file|
+      return Base64.encode64(image_file.read)
+    end
   end
 
   def to_json_load

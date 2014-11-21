@@ -1,3 +1,4 @@
+//= require add_features
 //= require main
 //= require avatar_human
 //= require layers
@@ -9,6 +10,7 @@
 //= require map
 //= require objects_list
 //= require survivor
+//= require image_util
 
 var main;
 

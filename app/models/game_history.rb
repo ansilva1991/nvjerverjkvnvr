@@ -7,11 +7,9 @@ class GameHistory < ActiveRecord::Base
   before_destroy :destroy_files
 
   def self.init current_user, survivor_params
-    survivor = Survivor.create survivor_params
-
     game_history = GameHistory.new
     game_history.user = current_user
-    game_history.survivors << survivor
+    game_history.survivors << Survivor.create(survivor_params)
     game_history.map = Map.new
 
     game_history.save
