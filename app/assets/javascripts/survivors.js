@@ -14,10 +14,10 @@ main.loop = new GameLoop(function(){
   ctx.fillRect(0,0,64,96);
 
   avatar.Update();
-  avatar.Draw(ctx);
+  avatar.Draw(ctx,16,52);
 });
 
-var avatar = new AvatarHuman({ skin : 0 , x : 16, y : 52 , scale : 2 });
+var avatar = new AvatarHuman({ skin : 0 , scale : 2 });
 avatar.parent_dir = 7;
 avatar.updateResources();
 avatar.changeAnim("idle");
