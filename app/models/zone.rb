@@ -34,21 +34,28 @@ class Zone < ActiveRecord::Base
   end
 
   def static_mask
-    File.open("users/#{map.game_history.user_id}/#{zone_code}_mask.png", 'r') do|image_file|
-      return Base64.encode64(image_file.read)
+    f = Magick::ImageList.new("users/#{map.game_history.user_id}/#{zone_code}_mask.png").first
+    g = Grid.new({ w: f.rows, h: f.columns, default: 0 })
+    f.each_pixel do |pixel, c, r|
+      g.set(r,c,1) if pixel.red == 0
     end
+    g.grid
   end
 
    def floor_tiles
-    File.open("users/#{map.game_history.user_id}/#{zone_code}_floor_tiles.png", 'r') do|image_file|
-      return Base64.encode64(image_file.read)
+    f = Magick::ImageList.new("users/#{map.game_history.user_id}/#{zone_code}_floor_tiles.png").first
+    g = Grid.new({ w: f.columns, h: f.rows })
+    f.each_pixel do |pixel, c, r|
+      g.set(c,r,pixel.red)
     end
+    g.grid
   end
 
   def to_json_load
     {
       floor_tiles: floor_tiles,
-      static_mask: static_mask
+      static_mask: static_mask,
+      zone_code: zone_code
     }
   end
 end

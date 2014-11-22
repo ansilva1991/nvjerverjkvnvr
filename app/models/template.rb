@@ -30,14 +30,6 @@ class Template
     "_#{pixel.red}_#{pixel.blue}_#{pixel.green}"
   end
 
-  def self.int_to_pixel int
-    rgb = {}
-    %w(r g b).inject(int) {|a,i| rest, rgb[i] = a.divmod 256; rest}
-    rgb = rgb.collect{|i,j| j * 257 }
-
-    Pixel.new(rgb[0],rgb[1],rgb[2],0)
-  end
-
   def b64
     File.open(self.src, 'r') do|image_file|
       return Base64.encode64(image_file.read)

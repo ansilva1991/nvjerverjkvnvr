@@ -50,7 +50,7 @@ class TemplateZone < Template
     tiles.all_points.each do |point|
       f.pixel_color( point[:x],
                      point[:y],
-                     Template.int_to_pixel(point[:value].to_i) )
+                     Pixel.new(point[:value].to_i,0,0,0) )
       end
     f.write "#{path}_floor_tiles.png"
 

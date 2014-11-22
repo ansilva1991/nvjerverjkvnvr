@@ -10,7 +10,6 @@
 //= require map
 //= require objects_list
 //= require survivor
-//= require image_util
 //= require gui
 
 var main;
